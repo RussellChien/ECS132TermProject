@@ -1,9 +1,9 @@
-# load in 'law.school.admissions.rda'
-load('law.school.admissions.rda',verbose=T) 
+# load in dataset
+load('communities.and.crime.rda',verbose=T) 
 
 # data analysis 
-print(head(law.school.admissions))
-hist(law.school.admissions$fam_inc) 
+print(head(communities.and.crime))
+density.default(communities.and.crime$PctLargeHouseFam) 
 
 # image type is implied by the file name suffix, e.g. '.jpg'; other choices are '.pdf' and '.png'
 pr2file <- function (filename)
@@ -28,13 +28,9 @@ pr2file <- function (filename)
 }
 
 # normal family
-# use lsat or fam_inc
 
 # exponential family
-# idk
 
 # gamma family
-# use lsat or fam_inc
 
 # beta family
-# use ugpa
