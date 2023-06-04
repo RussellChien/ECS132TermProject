@@ -2,8 +2,8 @@
 load('communities.and.crime.rda',verbose=T) 
 
 # data analysis 
-print(head(communities.and.crime))
-density.default(communities.and.crime$PctLargeHouseFam) 
+# print(head(communities.and.crime))
+
 
 # image type is implied by the file name suffix, e.g. '.jpg'; other choices are '.pdf' and '.png'
 pr2file <- function (filename)
@@ -28,9 +28,28 @@ pr2file <- function (filename)
 }
 
 # normal family
+hist(communities.and.crime$pctWWage, probability = TRUE)
+pr2file('pctWWage_histogram.png')
+plot(density(communities.and.crime$pctWWage))
+pr2file('PctWWage_density_plot.png')
 
 # exponential family
+hist(communities.and.crime$NumInShelters, probability = TRUE)
+pr2file('NumInShelters_histogram.png')
+plot(density(communities.and.crime$NumInShelters))
+pr2file('NumInShelters_density_plot.png')
 
 # gamma family
+hist(communities.and.crime$PctNotHSGrad, probability = TRUE)
+pr2file('PctNotHSGrad_histogram.png')
+plot(density(communities.and.crime$PctNotHSGrad))
+pr2file('PctNotHSGrad_density_plot.png')
 
 # beta family
+hist(communities.and.crime$PctLargHouseFam, probability = TRUE)
+pr2file('PctLargHouseFam_histogram.png')
+plot(density(communities.and.crime$PctLargHouseFam))
+pr2file('PctLargHouseFam_density_plot.png')
+
+
+
