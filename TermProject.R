@@ -34,10 +34,10 @@ plot(density(communities.and.crime$pctWWage))
 pr2file('PctWWage_density_plot.png')
 
 # exponential family
-hist(communities.and.crime$NumInShelters, probability = TRUE)
-pr2file('NumInShelters_histogram.png')
-plot(density(communities.and.crime$NumInShelters))
-pr2file('NumInShelters_density_plot.png')
+hist(communities.and.crime$PctLargHouseFam, probability = TRUE)
+pr2file('PctLargHouseFam_histogram.png')
+plot(density(communities.and.crime$PctLargHouseFam))
+pr2file('PctLargHouseFam_density_plot.png')
 
 # gamma family
 hist(communities.and.crime$PctNotHSGrad, probability = TRUE)
@@ -46,10 +46,10 @@ plot(density(communities.and.crime$PctNotHSGrad))
 pr2file('PctNotHSGrad_density_plot.png')
 
 # beta family
-hist(communities.and.crime$PctLargHouseFam, probability = TRUE)
-pr2file('PctLargHouseFam_histogram.png')
-plot(density(communities.and.crime$PctLargHouseFam))
-pr2file('PctLargHouseFam_density_plot.png')
+hist(communities.and.crime$PctNotSpeakEnglWell, probability = TRUE)
+pr2file('PctNotSpeakEnglWell_histogram.png')
+plot(density(communities.and.crime$PctNotSpeakEnglWell))
+pr2file('PctNotSpeakEnglWell_density_plot.png')
 
 
 
