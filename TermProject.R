@@ -33,6 +33,17 @@ pr2file('pctWWage_histogram.png')
 plot(density(communities.and.crime$pctWWage))
 pr2file('PctWWage_density_plot.png')
 
+n <- length(communities.and.crime$pctWWage)
+llnorm <- function(mean, var) {
+    loglik <- -n*(log(2*pi) + log(var))/2 - sum((communities.and.crime$pctWWage - mean)^2)/(2*var)
+    return(-loglik)
+}
+mlenorm <- mle(minuslogl=llnorm,start=c(list(mean=1),list(var=1)))
+
+plot(density(communities.and.crime$pctWWage))
+curve(dnorm(x, mean=coef(mlenorm)[1], sd=sqrt(coef(mlenorm)[2])), add=TRUE, col='red')
+pr2file('PctWWage_mle_plot.png')
+
 # exponential family
 hist(communities.and.crime$PctLargHouseFam, probability = TRUE)
 pr2file('PctLargHouseFam_histogram.png')
