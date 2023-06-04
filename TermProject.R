@@ -1,6 +1,7 @@
 # load in dataset
 load('communities.and.crime.rda',verbose=T) 
 
+library(stats4)
 # data analysis 
 # print(head(communities.and.crime))
 
