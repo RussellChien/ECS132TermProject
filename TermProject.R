@@ -28,12 +28,17 @@ pr2file <- function (filename)
     dev.set(origdev)
 }
 
-# normal family
+# NORMAL FAMILY
+# use pctWWage
+# plot and save histogram
 hist(communities.and.crime$pctWWage, probability = TRUE)
 pr2file('pctWWage_histogram.png')
+
+# plot and save density plot 
 plot(density(communities.and.crime$pctWWage))
 pr2file('PctWWage_density_plot.png')
 
+# find MLE 
 n <- length(communities.and.crime$pctWWage)
 llnorm <- function(mean, var) {
     loglik <- -n*(log(2*pi) + log(var))/2 - sum((communities.and.crime$pctWWage - mean)^2)/(2*var)
@@ -41,27 +46,55 @@ llnorm <- function(mean, var) {
 }
 mlenorm <- mle(minuslogl=llnorm,start=c(list(mean=1),list(var=1)))
 
+# plot resulting density
 plot(density(communities.and.crime$pctWWage))
 curve(dnorm(x, mean=coef(mlenorm)[1], sd=sqrt(coef(mlenorm)[2])), add=TRUE, col='red')
-pr2file('PctWWage_mle_plot.png')
+#pr2file('PctWWage_mle_plot.png')
 
-# exponential family
+# EXPONENTIAL FAMILY
+# use PctLargHouseFam
+# plot and save histogram
 hist(communities.and.crime$PctLargHouseFam, probability = TRUE)
-pr2file('PctLargHouseFam_histogram.png')
+#pr2file('PctLargHouseFam_histogram.png')
+
+# plot and save density plot 
 plot(density(communities.and.crime$PctLargHouseFam))
-pr2file('PctLargHouseFam_density_plot.png')
+#pr2file('PctLargHouseFam_density_plot.png')
 
-# gamma family
+# GAMMA FAMILY
+# use PctNotHSGrad
+# plot and save histogram
 hist(communities.and.crime$PctNotHSGrad, probability = TRUE)
-pr2file('PctNotHSGrad_histogram.png')
-plot(density(communities.and.crime$PctNotHSGrad))
-pr2file('PctNotHSGrad_density_plot.png')
+#pr2file('PctNotHSGrad_histogram.png')
 
-# beta family
+# plot and save density plot 
+plot(density(communities.and.crime$PctNotHSGrad))
+#pr2file('PctNotHSGrad_density_plot.png')
+
+# BETA FAMILY
+# use PctNotSpeakEnglWell
+# plot and save histogram
 hist(communities.and.crime$PctNotSpeakEnglWell, probability = TRUE)
-pr2file('PctNotSpeakEnglWell_histogram.png')
+#pr2file('PctNotSpeakEnglWell_histogram.png')
+
+# plot and save density plot 
 plot(density(communities.and.crime$PctNotSpeakEnglWell))
-pr2file('PctNotSpeakEnglWell_density_plot.png')
+#pr2file('PctNotSpeakEnglWell_density_plot.png')
+
+# find MLE 
+n <- length(communities.and.crime$PctNotSpeakEnglWell)
+x <- sum(communities.and.crime$PctNotSpeakEnglWell)
+llnorm <- function(alpha, beta) {
+    loglik <- log((alpha+beta)/(alpha*beta)*x^(alpha-1)*(1-x)^(beta-1))
+    return(loglik)
+}
+mlenorm <- mle(minuslogl=llnorm,start=c(list(alpha=1),list(beta=1)))
+print(mlenorm)
+
+# plot resulting density
+plot(density(communities.and.crime$PctNotHSGrad))
+curve(dgamma(x, shape=coef(mlenorm)[1], rate=sqrt(coef(mlenorm)[2])), add=TRUE, col='red')
+
 
 
 
