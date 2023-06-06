@@ -32,11 +32,11 @@ pr2file <- function (filename)
 # use pctWWage
 # plot and save histogram
 hist(communities.and.crime$pctWWage, probability = TRUE)
-pr2file('pctWWage_histogram.png')
+#pr2file('normal//pctWWage_histogram.png')
 
 # plot and save density plot 
 plot(density(communities.and.crime$pctWWage))
-pr2file('PctWWage_density_plot.png')
+#pr2file('normal//PctWWage_density_plot.png')
 
 # find MLE 
 n <- length(communities.and.crime$pctWWage)
@@ -49,37 +49,37 @@ mlenorm <- mle(minuslogl=llnorm,start=c(list(mean=1),list(var=1)))
 # plot resulting density
 plot(density(communities.and.crime$pctWWage))
 curve(dnorm(x, mean=coef(mlenorm)[1], sd=sqrt(coef(mlenorm)[2])), add=TRUE, col='red')
-#pr2file('PctWWage_mle_plot.png')
+#pr2file('normal//PctWWage_mle_plot.png')
 
 # EXPONENTIAL FAMILY
 # use PctLargHouseFam
 # plot and save histogram
 hist(communities.and.crime$PctLargHouseFam, probability = TRUE)
-#pr2file('PctLargHouseFam_histogram.png')
+#pr2file('exponential//PctLargHouseFam_histogram.png')
 
 # plot and save density plot 
 plot(density(communities.and.crime$PctLargHouseFam))
-#pr2file('PctLargHouseFam_density_plot.png')
+#pr2file('exponential//PctLargHouseFam_density_plot.png')
 
 # GAMMA FAMILY
 # use PctNotHSGrad
 # plot and save histogram
 hist(communities.and.crime$PctNotHSGrad, probability = TRUE)
-#pr2file('PctNotHSGrad_histogram.png')
+#pr2file('gamma//PctNotHSGrad_histogram.png')
 
 # plot and save density plot 
 plot(density(communities.and.crime$PctNotHSGrad))
-#pr2file('PctNotHSGrad_density_plot.png')
+#pr2file('gamma//PctNotHSGrad_density_plot.png')
 
 # BETA FAMILY
 # use PctNotSpeakEnglWell
 # plot and save histogram
 hist(communities.and.crime$PctNotSpeakEnglWell, probability = TRUE)
-#pr2file('PctNotSpeakEnglWell_histogram.png')
+#pr2file('beta//PctNotSpeakEnglWell_histogram.png')
 
 # plot and save density plot 
 plot(density(communities.and.crime$PctNotSpeakEnglWell))
-#pr2file('PctNotSpeakEnglWell_density_plot.png')
+#pr2file('beta//PctNotSpeakEnglWell_density_plot.png')
 
 # find MLE 
 n <- length(communities.and.crime$PctNotSpeakEnglWell)
