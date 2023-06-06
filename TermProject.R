@@ -49,7 +49,7 @@ mlenorm <- mle(minuslogl=llnorm,start=c(list(mean=1),list(var=1)))
 # plot resulting density
 plot(density(communities.and.crime$pctWWage))
 curve(dnorm(x, mean=coef(mlenorm)[1], sd=sqrt(coef(mlenorm)[2])), add=TRUE, col='red')
-#pr2file('normal//PctWWage_mle_plot.png')
+pr2file('normal//PctWWage_mle_plot.png')
 
 # EXPONENTIAL FAMILY
 # use PctLargHouseFam
