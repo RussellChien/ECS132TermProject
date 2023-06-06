@@ -40,15 +40,15 @@ plot(density(communities.and.crime$pctWWage))
 
 # find MLE 
 n <- length(communities.and.crime$pctWWage)
-llnorm <- function(mean, var) {
+ll <- function(mean, var) {
     loglik <- -n*(log(2*pi) + log(var))/2 - sum((communities.and.crime$pctWWage - mean)^2)/(2*var)
     return(-loglik)
 }
-mlenorm <- mle(minuslogl=llnorm,start=c(list(mean=1),list(var=1)))
+z <- mle(minuslogl=ll,start=c(list(mean=1),list(var=1)))
 
 # plot resulting density
 plot(density(communities.and.crime$pctWWage))
-curve(dnorm(x, mean=coef(mlenorm)[1], sd=sqrt(coef(mlenorm)[2])), add=TRUE, col='red')
+curve(dnorm(x, mean=coef(z)[1], sd=sqrt(coef(z)[2])), add=TRUE, col='red')
 pr2file('normal//PctWWage_mle_plot.png')
 
 # EXPONENTIAL FAMILY
@@ -83,18 +83,25 @@ plot(density(communities.and.crime$PctNotSpeakEnglWell))
 
 # find MLE 
 n <- length(communities.and.crime$PctNotSpeakEnglWell)
-x <- sum(communities.and.crime$PctNotSpeakEnglWell)
-llnorm <- function(alpha, beta) {
-    loglik <- log((alpha+beta)/(alpha*beta)*x^(alpha-1)*(1-x)^(beta-1))
-    return(loglik)
+# x <- sum(communities.and.crime$PctNotSpeakEnglWell)
+x <- communities.and.crime$PctNotSpeakEnglWell
+x[which(x==0)] <- 0.001
+x[which(x==1)] <- 0.999
+ll <- function(alpha,beta) {
+    loglik <- (alpha-1)*sum(log(x)) + (beta-1)*sum(log(1-x)) - 
+        n*log(gamma(alpha)*gamma(beta)/gamma(alpha+beta))
+    return(-loglik)
 }
-mlenorm <- mle(minuslogl=llnorm,start=c(list(alpha=1),list(beta=1)))
-print(mlenorm)
+# ll <- function(alpha, beta) {
+#     loglik <- log((alpha+beta)/(alpha*beta)*x^(alpha-1)*(1-x)^(beta-1))
+#     return(loglik)
+# }
+z <- mle(minuslogl=ll,start=c(list(alpha=1),list(beta=1)))
 
 # plot resulting density
-plot(density(communities.and.crime$PctNotHSGrad))
-curve(dgamma(x, shape=coef(mlenorm)[1], rate=sqrt(coef(mlenorm)[2])), add=TRUE, col='red')
-
+plot(density(communities.and.crime$PctNotSpeakEnglWell))
+curve(dbeta(x, shape1=coef(z)[1], shape2=coef(z)[2]), add=TRUE, col='red')
+pr2file('beta//PctNotSpeakEnglWell_mle_plot.png')
 
 
 
