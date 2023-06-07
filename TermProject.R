@@ -56,10 +56,8 @@ pr2file('normal//PctWWage_mle_plot.png')
 
 # find MM
 mm_estimator <- function(x) {
-  sample_mean <- mean(x)
-  sample_variance <- var(x)
-  mu <- sample_mean
-  sigma <- sqrt(sample_variance)
+  mu <- mean(x)
+  sigma <- sqrt(mean(x^2) - mu^2)
   return(c(mu, sigma))
 }
 mm_estimates <- mm_estimator(x)
@@ -88,12 +86,25 @@ l1 <- function(lambda) {
     loglik <- n * log(lambda) - lambda * sum(x)
     return(-loglik)
 }
-z <- mle(minuslogl=l1,start=c(list(lambda=1)))
+mle_result <- mle(minuslogl=l1,start=c(list(lambda=1)))
+lambda = coef(mle_result)[1]
 
 # plot resulting density
-plot(density(communities.and.crime$PctLargHouseFam))
-curve(dexp(x, rate=coef(z)[1]), add=TRUE, col='red')
+plot(density(x))
+curve(dexp(x, rate=lambda), add=TRUE, col='red')
 pr2file('exponential//PctLargHouseFam_mle_plot.png')
+
+# find MM
+mm_estimator <- function(x) {
+  lambda <- 1 / mean(x)
+  return(lambda)
+}
+mm_estimate <- mm_estimator(x)
+
+# plot resulting density
+plot(density(x))
+curve(dexp(x, rate = mm_estimate), add = TRUE, col = 'blue')
+pr2file('exponential//PctLargHouseFam_mm_plot.png')
 
 # GAMMA FAMILY
 # use PctNotHSGrad
