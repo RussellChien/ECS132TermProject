@@ -40,17 +40,36 @@ plot(density(communities.and.crime$pctWWage))
 
 # find MLE 
 n <- length(communities.and.crime$pctWWage)
+x <- communities.and.crime$pctWWage
 ll <- function(mean, var) {
-    loglik <- -n*(log(2*pi) + log(var))/2 - sum((communities.and.crime$pctWWage - mean)^2)/(2*var)
+    loglik <- -n*(log(2*pi) + log(var))/2 - sum((x - mean)^2)/(2*var)
     return(-loglik)
 }
-z <- mle(minuslogl=ll,start=c(list(mean=1),list(var=1)))
+mle_result <- mle(minuslogl=ll,start=c(list(mean=1),list(var=1)))
+mle_mean = coef(mle_result)[1]
+mle_var = coef(mle_result)[2]
 
 # plot resulting density
-plot(density(communities.and.crime$pctWWage))
-curve(dnorm(x, mean=coef(z)[1], sd=sqrt(coef(z)[2])), add=TRUE, col='red')
+plot(density(x))
+curve(dnorm(x, mean=mle_mean, sd=sqrt(mle_var)), add=TRUE, col='red')
 pr2file('normal//PctWWage_mle_plot.png')
 
+# find MM
+mm_estimator <- function(x) {
+  sample_mean <- mean(x)
+  sample_variance <- var(x)
+  mu <- sample_mean
+  sigma <- sqrt(sample_variance)
+  return(c(mu, sigma))
+}
+mm_estimates <- mm_estimator(x)
+mm_mean = mm_estimates[1]
+mm_sd = mm_estimates[2]
+
+# plot resulting density
+plot(density(x))
+curve(dnorm(x, mean = mm_mean, sd = mm_sd), add = TRUE, col = 'blue')
+pr2file('normal//PctWWage_mm_plot.png')
 
 # EXPONENTIAL FAMILY
 # use PctLargHouseFam
