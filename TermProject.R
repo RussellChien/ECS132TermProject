@@ -116,6 +116,20 @@ hist(communities.and.crime$PctNotHSGrad, probability = TRUE)
 plot(density(communities.and.crime$PctNotHSGrad))
 #pr2file('gamma//PctNotHSGrad_density_plot.png')
 
+# find MLE
+x <- communities.and.crime$PctNotHSGrad
+x[which(x==0)] <- 0.001
+n <- length(x)
+ll <- function(k, theta) {
+    loglik <- (k-1)*sum(log(x)) - sum(x/theta) - 
+        n*k*log(theta) - n*log(gamma(k))
+    return(-loglik)
+}
+z <- mle(minuslogl=ll,start=c(list(k=1),list(theta=1)))
+plot(density(communities.and.crime$PctNotHSGrad))
+curve(dgamma(x, shape=coef(z)[1], rate=1/coef(z)[2]), add=TRUE, col='red')
+pr2file('gamma//PctNotHSGrad_mle_plot.png')
+
 # BETA FAMILY
 # use PctNotSpeakEnglWell
 # plot and save histogram
