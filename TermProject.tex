@@ -1,0 +1,23 @@
+\documentclass[12pt, letterpaper]{article}
+\usepackage{datetime}
+\newdateformat{monthyeardate}{\monthname[\THEMONTH] \THEYEAR}
+
+\title{\textbf{ECS 132 Term Project}}
+\author{\parbox{\linewidth}{\centering%
+  Steven Alvarado, Russell Chien, and Ruth Hailu\endgraf\bigskip
+  University of California, Davis}}
+\date{\monthyeardate\today}
+
+\usepackage{graphicx} 
+\graphicspath{{plots/}}
+
+\begin{document}
+\maketitle
+
+\centering
+\includegraphics[width=0.45\textwidth]{normal/pctWWage_hist}
+\includegraphics[width=0.45\textwidth]{normal/pctWWage_density}
+\includegraphics[width=0.45\textwidth]{normal/pctWWage_mle}
+\includegraphics[width=0.45\textwidth]{normal/pctWWage_mm}
+
+\end{document}
