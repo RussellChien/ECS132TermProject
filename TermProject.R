@@ -117,7 +117,6 @@ mm <- function(x) {
     mu <- mean(x)
     theta <- mean(x * log(x)) - mu * mean(log(x))
     k <- mu / theta
-
     return(c(k, theta))
 }
 
@@ -144,10 +143,11 @@ x[which(x == 1)] <- 0.9999
 # x[which(x == 0)] <- 0.1   # Closer match with data,
 # x[which(x == 1)] <- 0.9   # but farther match from MM
 
-ll <- function(alpha,beta) {
-    loglik <- (alpha-1)*sum(log(x)) + (beta-1)*sum(log(1-x)) - 
-        n*log(gamma(alpha)*gamma(beta)/gamma(alpha+beta))
-    return(-loglik)
+ll <- function(alpha, beta) {
+    loglik <- n * log(gamma(alpha + beta)) - n * log(gamma(alpha)) -
+              n * log(gamma(beta)) + (alpha - 1) * sum(log(x)) +
+              (beta - 1) * sum(log(1 - x))
+    -loglik
 }
 
 z <- mle(minuslogl = ll, start = c(list(alpha = 1), list(beta = 1)))
