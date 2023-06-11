@@ -1,25 +1,18 @@
-# load in dataset
-load('communities.and.crime.rda',verbose=T) 
-
 library(stats4)
-# data analysis 
-# print(head(communities.and.crime))
+# Load dataset: Communities and Crime
+load("communities.and.crime.rda", verbose = TRUE) 
 
-
-# image type is implied by the file name suffix, e.g. '.jpg'; other choices are '.pdf' and '.png'
-pr2file <- function (filename)
-{
+# Image type is implied by the file name suffix, e.g. '.jpg'; other choices are '.pdf' and '.png'
+pr2file <- function(filename) {
     origdev <- dev.cur()
-    parts <- strsplit(filename,".",fixed=TRUE)
+    parts <- strsplit(filename, ".", fixed = TRUE)
     nparts <- length(parts[[1]])
     suff <- parts[[1]][nparts]
     if (suff == "pdf") {
         pdf(filename)
-    }
-    else if (suff == "png") {
-        png(filename,bg='white')
-    }
-    else jpeg(filename)
+    } else if (suff == "png") {
+        png(filename, bg = "white")
+    } else jpeg(filename)
     devnum <- dev.cur()
     dev.set(origdev)
     dev.copy(which = devnum)
@@ -28,136 +21,153 @@ pr2file <- function (filename)
     dev.set(origdev)
 }
 
-# NORMAL FAMILY
-# use pctWWage
-# plot and save histogram
+######### NORMAL FAMILY ######### Variable: pctWWage
 hist(communities.and.crime$pctWWage, probability = TRUE)
-#pr2file('normal//pctWWage_histogram.png')
-
-# plot and save density plot 
+pr2file("normal//pctWWage_histogram.png")
 plot(density(communities.and.crime$pctWWage))
-#pr2file('normal//PctWWage_density_plot.png')
-
-# find MLE 
-n <- length(communities.and.crime$pctWWage)
+pr2file("normal//pctWWage_density_plot.png")
 x <- communities.and.crime$pctWWage
+n <- length(x)
+
+### NORMAL: MLE ###
 ll <- function(mean, var) {
-    loglik <- -n*(log(2*pi) + log(var))/2 - sum((x - mean)^2)/(2*var)
-    return(-loglik)
+    loglik <- -n * (log(2 * pi) + log(var)) / 2 - sum((x - mean)^2) / (2 * var)
+    -loglik
 }
-mle_result <- mle(minuslogl=ll,start=c(list(mean=1),list(var=1)))
-mle_mean = coef(mle_result)[1]
-mle_var = coef(mle_result)[2]
 
-# plot resulting density
-plot(density(x))
-curve(dnorm(x, mean=mle_mean, sd=sqrt(mle_var)), add=TRUE, col='red')
-pr2file('normal//PctWWage_mle_plot.png')
+z <- mle(minuslogl = ll, start = c(list(mean = 1), list(var = 1)))
+plot(density(communities.and.crime$pctWWage))
+curve(dnorm(x, mean = coef(z)[1], sd = sqrt(coef(z)[2])),
+            add = TRUE, col = "red")
+pr2file("normal//pctWWage_mle_plot.png")
 
-# find MM
-mm_estimator <- function(x) {
+### NORMAL: MM ###
+mm <- function(x) {
   mu <- mean(x)
   sigma <- sqrt(mean(x^2) - mu^2)
   return(c(mu, sigma))
 }
-mm_estimates <- mm_estimator(x)
-mm_mean = mm_estimates[1]
-mm_sd = mm_estimates[2]
 
-# plot resulting density
-plot(density(x))
-curve(dnorm(x, mean = mm_mean, sd = mm_sd), add = TRUE, col = 'blue')
-pr2file('normal//PctWWage_mm_plot.png')
+mm <- mm(x)
+plot(density(communities.and.crime$pctWWage))
+curve(dnorm(x, mean = mm[1], sd = mm[2]),
+            add = TRUE, col = "blue")
+pr2file("normal//pctWWage_mm_plot.png")
 
-# EXPONENTIAL FAMILY
-# use PctLargHouseFam
-# plot and save histogram
+
+
+######### EXPONENTIAL FAMILY ######### Variable: PctLargHouseFam
 hist(communities.and.crime$PctLargHouseFam, probability = TRUE)
-#pr2file('exponential//PctLargHouseFam_histogram.png')
-
-# plot and save density plot 
+# pr2file("exponential//PctLargHouseFam_histogram.png")
 plot(density(communities.and.crime$PctLargHouseFam))
-#pr2file('exponential//PctLargHouseFam_density_plot.png')
-
-# find MLE 
-n <- length(communities.and.crime$PctLargHouseFam)
+# pr2file("exponential//PctLargHouseFam_density_plot.png")
 x <- communities.and.crime$PctLargHouseFam
-l1 <- function(lambda) {
-    loglik <- n * log(lambda) - lambda * sum(x)
-    return(-loglik)
-}
-mle_result <- mle(minuslogl=l1,start=c(list(lambda=1)))
-lambda = coef(mle_result)[1]
-
-# plot resulting density
-plot(density(x))
-curve(dexp(x, rate=lambda), add=TRUE, col='red')
-pr2file('exponential//PctLargHouseFam_mle_plot.png')
-
-# find MM
-mm_estimator <- function(x) {
-  lambda <- 1 / mean(x)
-  return(lambda)
-}
-mm_estimate <- mm_estimator(x)
-
-# plot resulting density
-plot(density(x))
-curve(dexp(x, rate = mm_estimate), add = TRUE, col = 'blue')
-pr2file('exponential//PctLargHouseFam_mm_plot.png')
-
-# GAMMA FAMILY
-# use PctNotHSGrad
-# plot and save histogram
-hist(communities.and.crime$PctNotHSGrad, probability = TRUE)
-#pr2file('gamma//PctNotHSGrad_histogram.png')
-
-# plot and save density plot 
-plot(density(communities.and.crime$PctNotHSGrad))
-#pr2file('gamma//PctNotHSGrad_density_plot.png')
-
-# find MLE
-x <- communities.and.crime$PctNotHSGrad
-x[which(x==0)] <- 0.001
 n <- length(x)
-ll <- function(k, theta) {
-    loglik <- (k-1)*sum(log(x)) - sum(x/theta) - 
-        n*k*log(theta) - n*log(gamma(k))
-    return(-loglik)
+
+### EXPONENTIAL: MLE ###
+ll <- function(lambda) {
+    loglik <- n * log(lambda) - lambda * sum(x)
+    -loglik
 }
-z <- mle(minuslogl=ll,start=c(list(k=1),list(theta=1)))
+
+z <- mle(minuslogl = ll, start = c(list(lambda = 1)))
+plot(density(communities.and.crime$PctLargHouseFam))
+curve(dexp(x, rate = coef(z)[1]),
+           from = 0, add = TRUE, col = "red")
+pr2file("exponential//PctLargHouseFam_mle_plot.png")
+
+### EXPONENTIAL: MM ###
+mm <- function(x) {
+    lambda <- 1 / mean(x)
+    lambda
+}
+
+mm <- mm(x)
+plot(density(communities.and.crime$PctLargHouseFam))
+curve(dexp(x, rate = mm),
+           from = 0, add = TRUE, col = "blue")
+pr2file("exponential//PctLargHouseFam_mm_plot.png")
+
+
+
+######### GAMMA FAMILY ######### Variable: PctNotHsGrad
+hist(communities.and.crime$PctNotHSGrad, probability = TRUE)
+# pr2file("gamma//PctNotHSGrad_histogram.png")
 plot(density(communities.and.crime$PctNotHSGrad))
-curve(dgamma(x, shape=coef(z)[1], rate=1/coef(z)[2]), add=TRUE, col='red')
-pr2file('gamma//PctNotHSGrad_mle_plot.png')
+# pr2file("gamma//PctNotHSGrad_density_plot.png")
+x <- communities.and.crime$PctNotHSGrad
+n <- length(x)
 
-# BETA FAMILY
-# use PctNotSpeakEnglWell
-# plot and save histogram
+### GAMMA: MLE ###
+x[which(x == 0)] <- 0.1
+ll <- function(k, theta) {
+    loglik <- (k - 1) * sum(log(x)) - sum(x / theta) -
+               n * k * log(theta) - n * log(gamma(k))
+    -loglik
+}
+
+z <- mle(minuslogl = ll, start = c(list(k = 1), list(theta = 1)))
+plot(density(communities.and.crime$PctNotHSGrad))
+curve(dgamma(x, shape = coef(z)[1], scale = coef(z)[2]),
+             from = 0, add = TRUE, col = "red")
+pr2file("gamma//PctNotHSGrad_mle_plot.png")
+
+### GAMMA: MM ###
+mm <- function(x) {
+    mu <- mean(x)
+    theta <- mean(x * log(x)) - mu * mean(log(x))
+    k <- mu / theta
+
+    return(c(k, theta))
+}
+
+mm <- mm(x)
+plot(density(communities.and.crime$PctNotHSGrad))
+curve(dgamma(x, shape = mm[1], scale = mm[2]),
+             from = 0, add = TRUE, col = "blue")
+pr2file("gamma//PctNotHSGrad_mm_plot.png")
+
+
+
+######### BETA FAMILY ######### Variable: PctNotSpeakEnglWell
 hist(communities.and.crime$PctNotSpeakEnglWell, probability = TRUE)
-#pr2file('beta//PctNotSpeakEnglWell_histogram.png')
-
-# plot and save density plot 
+# pr2file("beta//PctNotSpeakEnglWell_histogram.png")
 plot(density(communities.and.crime$PctNotSpeakEnglWell))
-#pr2file('beta//PctNotSpeakEnglWell_density_plot.png')
-
-# find MLE 
-n <- length(communities.and.crime$PctNotSpeakEnglWell)
-# x <- sum(communities.and.crime$PctNotSpeakEnglWell)
+# pr2file("beta//PctNotSpeakEnglWell_density_plot.png")
 x <- communities.and.crime$PctNotSpeakEnglWell
-#x[which(x==0)] <- 0.001
-#x[which(x==1)] <- 0.999
+n <- length(x)
+
+### BETA: MLE ###
+x[which(x == 0)] <- 0.0001  # As close as we can get before errors
+x[which(x == 1)] <- 0.9999
+
+# x[which(x == 0)] <- 0.1   # Closer match with data,
+# x[which(x == 1)] <- 0.9   # but farther match from MM
+
 ll <- function(alpha,beta) {
     loglik <- (alpha-1)*sum(log(x)) + (beta-1)*sum(log(1-x)) - 
         n*log(gamma(alpha)*gamma(beta)/gamma(alpha+beta))
     return(-loglik)
 }
-# ll <- function(alpha, beta) {
-#     loglik <- log((alpha+beta)/(alpha*beta)*x^(alpha-1)*(1-x)^(beta-1))
-#     return(loglik)
-# }
-z <- mle(minuslogl=ll,start=c(list(alpha=1),list(beta=1)))
 
-# plot resulting density
+z <- mle(minuslogl = ll, start = c(list(alpha = 1), list(beta = 1)))
 plot(density(communities.and.crime$PctNotSpeakEnglWell))
-curve(dbeta(x, shape1=coef(z)[1], shape2=coef(z)[2]), add=TRUE, col='red')
-pr2file('beta//PctNotSpeakEnglWell_mle_plot.png')
+curve(dbeta(x, shape1 = coef(z)[1], shape2 = coef(z)[2]),
+            from = 0, to = 1, add = TRUE, col = "red")
+pr2file("beta//PctNotSpeakEnglWell_mle_plot.png")
+
+### BETA: MM ###
+mm <- function(x) {
+    mu <- mean(x)
+    var <- var(x)
+    alpha <- mu * (mu * (1 - mu) / var - 1)
+    beta <- (1 - mu) * (mu * (1 - mu) / var - 1)
+    return(c(alpha, beta))
+}
+
+mm <- mm(x)
+plot(density(communities.and.crime$PctNotSpeakEnglWell))
+curve(dbeta(x, shape1 = mm[1], shape2 = mm[2]),
+            from = 0, to = 1, add = TRUE, col = "blue")
+pr2file("beta//PctNotSpeakEnglWell_mm_plot.png")
+
