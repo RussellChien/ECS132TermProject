@@ -48,9 +48,9 @@ mm <- function(x) {
   return(c(mu, sigma))
 }
 
-mm <- mm(x)
+e <- mm(x)
 plot(density(communities.and.crime$pctWWage))
-curve(dnorm(x, mean = mm[1], sd = mm[2]),
+curve(dnorm(x, mean = e[1], sd = e[2]),
             add = TRUE, col = "blue")
 pr2file("normal//pctWWage_mm_plot.png")
 
@@ -82,9 +82,9 @@ mm <- function(x) {
     lambda
 }
 
-mm <- mm(x)
+e <- mm(x)
 plot(density(communities.and.crime$PctLargHouseFam))
-curve(dexp(x, rate = mm),
+curve(dexp(x, rate = e),
            from = 0, add = TRUE, col = "blue")
 pr2file("exponential//PctLargHouseFam_mm_plot.png")
 
@@ -121,9 +121,9 @@ mm <- function(x) {
     return(c(k, theta))
 }
 
-mm <- mm(x)
+e <- mm(x)
 plot(density(communities.and.crime$PctNotHSGrad))
-curve(dgamma(x, shape = mm[1], scale = mm[2]),
+curve(dgamma(x, shape = e[1], scale = e[2]),
              from = 0, add = TRUE, col = "blue")
 pr2file("gamma//PctNotHSGrad_mm_plot.png")
 
@@ -165,9 +165,9 @@ mm <- function(x) {
     return(c(alpha, beta))
 }
 
-mm <- mm(x)
+e <- mm(x)
 plot(density(communities.and.crime$PctNotSpeakEnglWell))
-curve(dbeta(x, shape1 = mm[1], shape2 = mm[2]),
+curve(dbeta(x, shape1 = e[1], shape2 = e[2]),
             from = 0, to = 1, add = TRUE, col = "blue")
 pr2file("beta//PctNotSpeakEnglWell_mm_plot.png")
 
