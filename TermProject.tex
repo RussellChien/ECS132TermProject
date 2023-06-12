@@ -62,10 +62,29 @@ According to the UCI Machine Learning Repository, \textbf{pctWWage} is described
 
 
 \section{MLE and MM}
-
+To find the MLE of the normal family, we first defined our log likelihood function:
+\begin{equation}
+  L(\mu, \sigma^2) = -n \log{(2\pi)} + \frac{\log{(\sigma^2)}}{2} - \frac{\sum(x-\mu)^2}{2\sigma^2}
+\end{equation}
+To find the MLE, we use R's built in mle() function with the negative log likelihood function. 
+\begin{lstlisting}
+z <- mle(minuslogl = ll, start = c(list(mean = 1), list(var = 1)))
+\end{lstlisting} 
 
 \begin{center}
 \includegraphics[width=0.45\textwidth]{normal/pctWWage_mle}
+\end{center}
+
+To find the MM of the normal family, we used the following function to predict $\mu$ and $\sigma^2$.
+\begin{lstlisting}
+  mm <- function(x) {
+    mu <- mean(x)
+    sigma <- sqrt(mean(x^2) - mu^2)
+    return(c(mu, sigma))
+  }  
+\end{lstlisting} 
+
+\begin{center}
 \includegraphics[width=0.45\textwidth]{normal/pctWWage_mm}
 \end{center}
 
@@ -88,10 +107,28 @@ According to the UCI Machine Learning Repository, \textbf{PctLargHouseFam} is de
 \end{center}
 
 \section{MLE and MM}
-
+To find the MLE of the exponential family, we first defined our log likelihood function:
+\begin{equation}
+  L(\lambda) = n \log{\lambda} - \lambda \sum{x}
+\end{equation}
+To find the MLE, we use R's built in mle() function with the negative log likelihood function. 
+\begin{lstlisting}
+  z <- mle(minuslogl = ll, start = c(list(lambda = 1)))
+\end{lstlisting} 
 
 \begin{center}
 \includegraphics[width=0.45\textwidth]{exponential/PctLargHouseFam_mle}
+\end{center}
+
+To find the MM of the exponential family, we used the following function to predict the value of $\lambda$:
+\begin{lstlisting}
+  mm <- function(x) {
+    lambda <- 1 / mean(x)
+    lambda
+}
+\end{lstlisting}
+
+\begin{center}
 \includegraphics[width=0.45\textwidth]{exponential/PctLargHouseFam_mm}
 \end{center}
 
@@ -115,10 +152,30 @@ According to the UCI Machine Learning Repository, \textbf{PctNotHsGrad} is descr
 \end{center}
 
 \section{MLE and MM}
-
+To find the MLE of the gamma family, we first defined our log likelihood function:
+\begin{equation}
+  L(k, \theta) = (k-1)\sum(\log{x}) - \sum(\frac{x}{\theta}) - n k \log{(\theta)} - n \log{(\Gamma(k))}
+\end{equation}
+To find the MLE, we use R's built in mle() function with the negative log likelihood function. 
+\begin{lstlisting}
+  z <- mle(minuslogl = ll, start = c(list(k = 1), list(theta = 1)))
+\end{lstlisting} 
 
 \begin{center}
 \includegraphics[width=0.45\textwidth]{gamma/PctNotHsGrad_mle}
+\end{center}
+
+To find the MM of the gamma family, we used the following function to predict the value of $k$ and $\theta$:
+\begin{lstlisting}
+  mm <- function(x) {
+    mu <- mean(x)
+    theta <- mean(x * log(x)) - mu * mean(log(x))
+    k <- mu / theta
+    return(c(k, theta))
+}
+\end{lstlisting}
+
+\begin{center}
 \includegraphics[width=0.45\textwidth]{gamma/PctNotHsGrad_mm}
 \end{center}
 
@@ -153,7 +210,7 @@ We then found the log likelihood function:
 L(\alpha, \beta) = n \log{(\Gamma(\alpha+\beta))} - n \log{(\Gamma(\alpha))} - n \log{(\Gamma(\beta))} + \\
 (\alpha - 1) \sum(\log(x)) + (\beta-1) \sum(\log{(1-x)})
 \end{multline}
-To find the MLE, we use R's built in mle() function with the negative value of our 4.1 log likelihood function. 
+To find the MLE, we use R's built in mle() function with the negative log likelihood function. 
 \begin{lstlisting}
 z <- mle(minuslogl = ll, start = c(list(alpha = 1), list(beta = 1)))
 \end{lstlisting} 
