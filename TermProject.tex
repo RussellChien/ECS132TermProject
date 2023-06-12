@@ -10,6 +10,35 @@
 
 \usepackage{graphicx} 
 \usepackage{titlesec}
+\usepackage{amsmath}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\lstset{style=mystyle}
 
 \graphicspath{{plots/}}
 
@@ -71,11 +100,52 @@ According to the UCI Machine Learning Repository, \textbf{PctNotHsGrad} is descr
 For the beta family of continuous distributions, we observed that the variable \textbf{PctNotSpeakEnglWell} was a suitable approximation. 
 According to the UCI Machine Learning Repository, \textbf{PctNotSpeakEnglWell} is described as the percentage of people who do not speak English well. 
 
+
+\section{Histogram and Density}
+
+
+
 \begin{center}
 \includegraphics[width=0.45\textwidth]{beta/PctNotSpeakEnglWell_hist}
 \includegraphics[width=0.45\textwidth]{beta/PctNotSpeakEnglWell_density}
+\end{center}
+
+
+\section{MLE and MM}
+To find the MLE of the beta family, we first had to scale our data so it was within the support of $(0, 1)$: 
+\begin{lstlisting}
+  x[which(x == 0)] <- 0.0001  
+  x[which(x == 1)] <- 0.9999
+\end{lstlisting} 
+We then found the log likelihood function:
+\begin{multline}
+L(\alpha, \beta) = n \log{(\Gamma(\alpha+\beta))} - n \log{(\Gamma(\alpha))} - n \log{(\Gamma(\beta))} + \\
+(\alpha - 1) \sum(\log(x)) + (\beta-1) \sum(\log{(1-x)})
+\end{multline}
+To find the MLE, we use R's built in mle() function with the negative value of our 4.1 log likelihood function. 
+\begin{lstlisting}
+z <- mle(minuslogl = ll, start = c(list(alpha = 1), list(beta = 1)))
+\end{lstlisting} 
+
+\begin{center}
 \includegraphics[width=0.45\textwidth]{beta/PctNotSpeakEnglWell_mle}
+\end{center}
+
+To find the MM of the beta family, we used the following function to estimate the $\alpha$ and $\beta$ values:
+\begin{lstlisting}
+  mm <- function(x) {
+    mu <- mean(x)
+    var <- var(x)
+    alpha <- mu * (mu * (1 - mu) / var - 1)
+    beta <- (1 - mu) * (mu * (1 - mu) / var - 1)
+    return(c(alpha, beta))
+}
+\end{lstlisting} 
+
+\begin{center}
 \includegraphics[width=0.45\textwidth]{beta/PctNotSpeakEnglWell_mm}
 \end{center}
+
+\section{Conclusion}
 
 \end{document}
