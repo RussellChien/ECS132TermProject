@@ -23,9 +23,9 @@ pr2file <- function(filename) {
 
 ######### NORMAL FAMILY ######### Variable: pctWWage
 hist(communities.and.crime$pctWWage, probability = TRUE)
-pr2file("normal//pctWWage_histogram.png")
+pr2file("normal//pctWWage_hist.png")
 plot(density(communities.and.crime$pctWWage))
-pr2file("normal//pctWWage_density_plot.png")
+pr2file("normal//pctWWage_density.png")
 x <- communities.and.crime$pctWWage
 n <- length(x)
 
@@ -39,7 +39,7 @@ z <- mle(minuslogl = ll, start = c(list(mean = 1), list(var = 1)))
 plot(density(communities.and.crime$pctWWage))
 curve(dnorm(x, mean = coef(z)[1], sd = sqrt(coef(z)[2])),
             add = TRUE, col = "red")
-pr2file("normal//pctWWage_mle_plot.png")
+pr2file("normal//pctWWage_mle.png")
 
 ### NORMAL: MM ###
 mm <- function(x) {
@@ -52,15 +52,15 @@ e <- mm(x)
 plot(density(communities.and.crime$pctWWage))
 curve(dnorm(x, mean = e[1], sd = e[2]),
             add = TRUE, col = "blue")
-pr2file("normal//pctWWage_mm_plot.png")
+pr2file("normal//pctWWage_mm.png")
 
 
 
 ######### EXPONENTIAL FAMILY ######### Variable: PctLargHouseFam
 hist(communities.and.crime$PctLargHouseFam, probability = TRUE)
-# pr2file("exponential//PctLargHouseFam_histogram.png")
+pr2file("exponential//PctLargHouseFam_hist.png")
 plot(density(communities.and.crime$PctLargHouseFam))
-# pr2file("exponential//PctLargHouseFam_density_plot.png")
+pr2file("exponential//PctLargHouseFam_density.png")
 x <- communities.and.crime$PctLargHouseFam
 n <- length(x)
 
@@ -74,7 +74,7 @@ z <- mle(minuslogl = ll, start = c(list(lambda = 1)))
 plot(density(communities.and.crime$PctLargHouseFam))
 curve(dexp(x, rate = coef(z)[1]),
            from = 0, add = TRUE, col = "red")
-pr2file("exponential//PctLargHouseFam_mle_plot.png")
+pr2file("exponential//PctLargHouseFam_mle.png")
 
 ### EXPONENTIAL: MM ###
 mm <- function(x) {
@@ -86,15 +86,15 @@ e <- mm(x)
 plot(density(communities.and.crime$PctLargHouseFam))
 curve(dexp(x, rate = e),
            from = 0, add = TRUE, col = "blue")
-pr2file("exponential//PctLargHouseFam_mm_plot.png")
+pr2file("exponential//PctLargHouseFam_mm.png")
 
 
 
 ######### GAMMA FAMILY ######### Variable: PctNotHsGrad
 hist(communities.and.crime$PctNotHSGrad, probability = TRUE)
-# pr2file("gamma//PctNotHSGrad_histogram.png")
+pr2file("gamma//PctNotHSGrad_hist.png")
 plot(density(communities.and.crime$PctNotHSGrad))
-# pr2file("gamma//PctNotHSGrad_density_plot.png")
+pr2file("gamma//PctNotHSGrad_density.png")
 x <- communities.and.crime$PctNotHSGrad
 n <- length(x)
 
@@ -110,7 +110,7 @@ z <- mle(minuslogl = ll, start = c(list(k = 1), list(theta = 1)))
 plot(density(communities.and.crime$PctNotHSGrad))
 curve(dgamma(x, shape = coef(z)[1], scale = coef(z)[2]),
              from = 0, add = TRUE, col = "red")
-pr2file("gamma//PctNotHSGrad_mle_plot.png")
+pr2file("gamma//PctNotHSGrad_mle.png")
 
 ### GAMMA: MM ###
 mm <- function(x) {
@@ -124,15 +124,15 @@ e <- mm(x)
 plot(density(communities.and.crime$PctNotHSGrad))
 curve(dgamma(x, shape = e[1], scale = e[2]),
              from = 0, add = TRUE, col = "blue")
-pr2file("gamma//PctNotHSGrad_mm_plot.png")
+pr2file("gamma//PctNotHSGrad_mm.png")
 
 
 
 ######### BETA FAMILY ######### Variable: PctNotSpeakEnglWell
 hist(communities.and.crime$PctNotSpeakEnglWell, probability = TRUE)
-# pr2file("beta//PctNotSpeakEnglWell_histogram.png")
+pr2file("beta//PctNotSpeakEnglWell_hist.png")
 plot(density(communities.and.crime$PctNotSpeakEnglWell))
-# pr2file("beta//PctNotSpeakEnglWell_density_plot.png")
+pr2file("beta//PctNotSpeakEnglWell_density.png")
 x <- communities.and.crime$PctNotSpeakEnglWell
 n <- length(x)
 
@@ -154,7 +154,7 @@ z <- mle(minuslogl = ll, start = c(list(alpha = 1), list(beta = 1)))
 plot(density(communities.and.crime$PctNotSpeakEnglWell))
 curve(dbeta(x, shape1 = coef(z)[1], shape2 = coef(z)[2]),
             from = 0, to = 1, add = TRUE, col = "red")
-pr2file("beta//PctNotSpeakEnglWell_mle_plot.png")
+pr2file("beta//PctNotSpeakEnglWell_mle.png")
 
 ### BETA: MM ###
 mm <- function(x) {
@@ -169,5 +169,5 @@ e <- mm(x)
 plot(density(communities.and.crime$PctNotSpeakEnglWell))
 curve(dbeta(x, shape1 = e[1], shape2 = e[2]),
             from = 0, to = 1, add = TRUE, col = "blue")
-pr2file("beta//PctNotSpeakEnglWell_mm_plot.png")
+pr2file("beta//PctNotSpeakEnglWell_mm.png")
 
