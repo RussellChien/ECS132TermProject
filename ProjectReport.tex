@@ -231,7 +231,7 @@ To find the MLE of PctNotSpeakEnglWell, we first had to scale our data so it was
 
 We then defined our log-likelihood function as:
 \begin{multline}
-L(\alpha, \beta) = n \log{(\Gamma(\alpha+\beta))} - n \log{(\Gamma(\alpha))} - n \log{(\Gamma(\beta))} + \\
+LL(\alpha, \beta) = n \log{(\Gamma(\alpha+\beta))} - n \log{(\Gamma(\alpha))} - n \log{(\Gamma(\beta))} + \\
 (\alpha - 1) \sum(\log(x)) + (\beta-1) \sum(\log{(1-x)})
 \end{multline}
 
