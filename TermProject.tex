@@ -139,7 +139,8 @@ To find the MM of the exponential family, we used the following function to pred
 \end{center}
 
 \section{Conclusion}
-The exponential approximation shows a reasonable fit at the tail end of the density distribution, but it exhibits noticeable deviations from the actual data around \(x=0.2\). The exponential distribution assumes a constant and consistent decay rate, which does not accurately capture the characteristics of the data around its peak.
+The exponential approximation shows a reasonable fit at the tail end of the density distribution, but it exhibits noticeable deviations from the actual data around \(x=0.2\). 
+The exponential distribution assumes a constant and consistent decay rate, which does not accurately capture the characteristics of the data around its peak.
 
 \maketitle
 \chapter{The Gamma Family}
@@ -190,7 +191,9 @@ To find the MM of the gamma family, we used the following function to predict th
 \end{center}
 
 \section{Conclusion}
-
+Both the MLE and MM gamma approximations exhibit a good overall fit to the PctNotHsGrad data, accurately capturing its general shape.
+However, both approximations tend to overestimate the height of the actual data peak.
+Despite this slight overestimation, the gamma approximations successfully capture the overall pattern of the data and seem to be suitable for approximating the population density.
 
 \maketitle
 \chapter{The Beta Family}
@@ -245,6 +248,8 @@ To find the MM of the beta family, we used the following function to estimate th
 \end{center}
 
 \section{Conclusion}
+The MLE and MM beta approximations exhibit notable differences from each other.
+The MLE approximation decays slower than the actual data, while the MM approximation matches the tail of the data well, suggesting that it captures the decay behavior of the population density more accurately.
 
 \chapter{Contributions}
 
