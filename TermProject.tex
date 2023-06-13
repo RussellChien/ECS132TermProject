@@ -89,7 +89,7 @@ To find the MM of the normal family, we used the following function to predict $
 \end{center}
 
 \section{Conclusion}
-
+The MLE and MM normal approximations appear to be a good fit for the data. The density estimates obtained from both approaches closely align with the density curve derived directly from the dataset.
 
 \maketitle
 \chapter{The Exponential Family}
@@ -133,7 +133,7 @@ To find the MM of the exponential family, we used the following function to pred
 \end{center}
 
 \section{Conclusion}
-
+The exponential approximation shows a reasonable fit at the tail end of the density distribution, but it exhibits noticeable deviations from the actual data around \(x=0.2\). The exponential distribution assumes a constant and consistent decay rate, which does not accurately capture the characteristics of the data around its peak.
 
 \maketitle
 \chapter{The Gamma Family}
@@ -156,6 +156,10 @@ To find the MLE of the gamma family, we first defined our log likelihood functio
 \begin{equation}
   L(k, \theta) = (k-1)\sum(\log{x}) - \sum(\frac{x}{\theta}) - n k \log{(\theta)} - n \log{(\Gamma(k))}
 \end{equation}
+We then had to scale our data to ensure the log likelihood function remained finite: 
+\begin{lstlisting}
+  x[which(x == 0)] <- 0.0001  
+\end{lstlisting} 
 To find the MLE, we use R's built in mle() function with the negative log likelihood function. 
 \begin{lstlisting}
   z <- mle(minuslogl = ll, start = c(list(k = 1), list(theta = 1)))
@@ -235,5 +239,7 @@ To find the MM of the beta family, we used the following function to estimate th
 \end{center}
 
 \section{Conclusion}
+
+\chapter{Contributions}
 
 \end{document}
