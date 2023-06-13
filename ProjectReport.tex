@@ -166,7 +166,7 @@ Below are the histogram and density plots of PctNotHsGrad.
 
 \pagebreak
 \section{Maximum Likelihood Estimation}
-To find the MLE of the gamma family, we first defined our log-likelihood function as:
+To find the MLE of PctNotHsGrad, we first defined our log-likelihood function as:
 \begin{equation}
   LL(k, \theta) = (k-1)\sum(\log{x}) - \sum(\frac{x}{\theta}) - n k \log{(\theta)} - n \log{(\Gamma(k))}
 \end{equation}
@@ -223,7 +223,7 @@ Below are the histogram and density plots of PctNotSpeakEnglWell.
 
 \pagebreak
 \section{Maximum Likelihood Estimation}
-To find the MLE of the PctNotSpeakEnglWell, we first had to scale our data so it was within the beta family's support of $(0, 1)$: 
+To find the MLE of PctNotSpeakEnglWell, we first had to scale our data so it was within the beta family's support of $(0, 1)$: 
 \begin{lstlisting}
   x[which(x == 0)] <- 0.0001  
   x[which(x == 1)] <- 0.9999
