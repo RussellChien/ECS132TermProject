@@ -235,7 +235,7 @@ L(\alpha, \beta) = n \log{(\Gamma(\alpha+\beta))} - n \log{(\Gamma(\alpha))} - n
 (\alpha - 1) \sum(\log(x)) + (\beta-1) \sum(\log{(1-x)})
 \end{multline}
 
-Using R's built-in mle() function, we utilized the \textit{negative} log-likelihood function to find the beta parameters of PctNotHsGrad.
+Using R's built-in mle() function, we utilized the \textit{negative} log-likelihood function to find the beta parameters of PctNotSpeakEnglWell.
 \begin{lstlisting}
 z <- mle(minuslogl = ll, start = c(list(alpha = 1), list(beta = 1)))
 \end{lstlisting} 
