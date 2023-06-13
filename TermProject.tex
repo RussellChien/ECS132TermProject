@@ -1,11 +1,12 @@
 \documentclass[12pt, letterpaper]{report}
-\usepackage{datetime}
-\newdateformat{monthyeardate}{\monthname[\THEMONTH] \THEYEAR}
 
 \title{\textbf{ECS 132 Term Project}}
 \author{\parbox{\linewidth}{\centering%
   Steven Alvarado, Russell Chien, and Ruth Hailu\endgraf\bigskip
   University of California, Davis}}
+
+\usepackage{datetime}
+\newdateformat{monthyeardate}{\monthname[\THEMONTH] \THEYEAR}
 \date{\monthyeardate\today}
 
 \usepackage{graphicx} 
@@ -15,26 +16,26 @@
 \usepackage[usenames,dvipsnames]{color} 
 
 \lstset{ 
-  language=R,                     % the language of the code
-  basicstyle=\normalsize\ttfamily, % the size of the fonts that are used for the code
-  numbers=left,                   % where to put the line-numbers
-  numberstyle=\normalsize\color{Blue},  % the style that is used for the line-numbers
-  stepnumber=1,                   % the step between two line-numbers. If it is 1, each line
-                                  % will be numbered
-  numbersep=5pt,                  % how far the line-numbers are from the code
-  backgroundcolor=\color{white},  % choose the background color. You must add \usepackage{color}
-  showspaces=false,               % show spaces adding particular underscores
-  showstringspaces=false,         % underline spaces within strings
-  showtabs=false,                 % show tabs within strings adding particular underscores
-  frame=single,                   % adds a frame around the code
-  rulecolor=\color{black},        % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. commens (green here))
-  tabsize=2,                      % sets default tabsize to 2 spaces
-  captionpos=b,                   % sets the caption-position to bottom
-  breaklines=true,                % sets automatic line breaking
-  breakatwhitespace=false,        % sets if automatic breaks should only happen at whitespace
-  keywordstyle=\color{RoyalBlue},      % keyword style
-  commentstyle=\color{YellowGreen},   % comment style
-  stringstyle=\color{ForestGreen}      % string literal style
+  language=R,                    	 	 % The language of the code
+  basicstyle=\normalsize\ttfamily,		 % The size of the fonts that are used for the code
+  numbers=left,                   		 % Where to put the line-numbers
+  numberstyle=\normalsize\color{Blue},  % The style that is used for the line-numbers
+  stepnumber=1,                   		 % The step between two line-numbers. If it is 1, each line
+                                  			 % will be numbered
+  numbersep=5pt,                  		 % How far the line-numbers are from the code
+  backgroundcolor=\color{white},  	 % Choose the background color. You must add \usepackage{color}
+  showspaces=false,               		 % Show spaces adding particular underscores
+  showstringspaces=false,         		 % Underline spaces within strings
+  showtabs=false,                 		 % Show tabs within strings adding particular underscores
+  frame=single,                   		 % Adds a frame around the code
+  rulecolor=\color{black},        		 % If not set, the frame-color may be changed on line-breaks within not-black text (e.g. commens (green here))
+  tabsize=2,                      			 % Sets default tabsize to 2 spaces
+  captionpos=b,                   		 % Sets the caption-position to bottom
+  breaklines=true,                		 % Sets automatic line breaking
+  breakatwhitespace=false,        		 % Sets if automatic breaks should only happen at whitespace
+  keywordstyle=\color{RoyalBlue},      	 % Keyword style
+  commentstyle=\color{YellowGreen},     % Comment style
+  stringstyle=\color{ForestGreen}      	 % String literal style
 } 
 
 \graphicspath{{plots/}}
@@ -46,36 +47,39 @@
 
 \begin{document}
 \maketitle
+
 \chapter{The Normal Family}
 \section{Communities and Crime: pctWWage}
-
 Our group observed that the variable \textbf{pctWWage} of the Communities and Crime dataset seemed well-approximated by the normal family of continuous distributions.
 According to the UCI Machine Learning Repository, \textbf{pctWWage} is described as the percentage of households within the United States with wage or salary income in 1989.
 
 \section{Histogram and Density}
-
-
+Below are the histogram and density plots of pctWWage using R's hist(), plot(), and density() functions.
 \begin{center}
 \includegraphics[width=0.45\textwidth]{normal/pctWWage_hist}
 \includegraphics[width=0.45\textwidth]{normal/pctWWage_density}
 \end{center}
 
 
-\section{MLE and MM}
-To find the MLE of the normal family, we first defined our log likelihood function:
+\section{Maximum Likelihood Estimation}
+In order to find the MLE of pctWWage, we first had to define our log-likelihood function as
 \begin{equation}
-  L(\mu, \sigma^2) = -n \log{(2\pi)} + \frac{\log{(\sigma^2)}}{2} - \frac{\sum(x-\mu)^2}{2\sigma^2}
+  LL(\mu, \sigma^2) = -n \log{(2\pi)} + \frac{\log{(\sigma^2)}}{2} - \frac{\sum(x-\mu)^2}{2\sigma^2}
 \end{equation}
-To find the MLE, we use R's built in mle() function with the negative log likelihood function. 
+
+Using R's built-in mle() function, we use the \textit{negative} log-likelihood to find the normal parameters of pctWWage.
 \begin{lstlisting}
 z <- mle(minuslogl = ll, start = c(list(mean = 1), list(var = 1)))
 \end{lstlisting} 
 
+Superimposing the resulting density on the kernel estimate plot results in
 \begin{center}
 \includegraphics[width=0.45\textwidth]{normal/pctWWage_mle}
 \end{center}
 
-To find the MM of the normal family, we used the following function to predict $\mu$ and $\sigma^2$.
+
+\section{Method of Moments}
+To find the MM-estimated density of pctWWage, we used the following function to approximate $\mu$ and $\sigma^2$.
 \begin{lstlisting}
   mm <- function(x) {
     mu <- mean(x)
@@ -84,12 +88,14 @@ To find the MM of the normal family, we used the following function to predict $
   }  
 \end{lstlisting} 
 
+Superimposing the resulting density grants us
 \begin{center}
 \includegraphics[width=0.45\textwidth]{normal/pctWWage_mm}
 \end{center}
 
 \section{Conclusion}
-The MLE and MM normal approximations appear to be a good fit for the data. The density estimates obtained from both approaches closely align with the density curve derived directly from the dataset.
+As seen on the plots, the MLE and MM normal approximations appear to be a good fit for pctWWage's data. The density estimates obtained from both methods closely align with the density curve derived directly from the dataset. 
+Thus, our group can confidently conclude that the variable pctWWage is well-approximated by the normal distribution family.
 
 \maketitle
 \chapter{The Exponential Family}
